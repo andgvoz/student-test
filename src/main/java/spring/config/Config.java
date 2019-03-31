@@ -10,7 +10,7 @@ public class Config {
 
     @Bean
     public QuestionReader questionReader() {
-        return new QuestionReader("questions.csv");
+        return new QuestionReader();
     }
 
     @Bean

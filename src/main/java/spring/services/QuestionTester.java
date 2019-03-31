@@ -1,10 +1,14 @@
 package spring.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import spring.domain.Question;
 
 import java.util.List;
 
 public class QuestionTester implements IQuestionTester {
+
+    @Value("${right.answer.index}")
+    private int rightAnswerIndex;
 
     public boolean isRightAnswer(Question question, String answer) {
         if(question == null) {
@@ -27,7 +31,7 @@ public class QuestionTester implements IQuestionTester {
         if (question != null) {
             List<String> answers = question.getAnswers();
             if (answers != null && !answers.isEmpty()) {
-                result = answers.get(0);
+                result = answers.get(rightAnswerIndex);
             }
         }
         return result;

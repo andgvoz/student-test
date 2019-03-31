@@ -1,9 +1,9 @@
 package spring;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.env.ConfigurableEnvironment;
 import spring.domain.Question;
 import spring.services.IQuestionReader;
 import spring.services.IQuestionTester;
@@ -14,12 +14,15 @@ import java.util.Scanner;
 
 @ComponentScan
 @Configuration
+@PropertySource("application.properties")
 public class Main {
 
-    private final static Locale LOCALE = Locale.ENGLISH;
+    @Value("${language}")
+    private String language;
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
+        final Locale LOCALE = new Locale(context.getEnvironment().getProperty("language"));
         System.out.println(context.getMessage("greeting.text", null, LOCALE));
         Scanner scanner = new Scanner(System.in);
         String fio = scanner.nextLine();
@@ -68,6 +71,10 @@ public class Main {
         System.out.println(context.getMessage("bye.message", null, LOCALE));
     }
 
+    /**
+     * Конфиг бандлов для поддержки разных языков
+     * @return
+     */
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();

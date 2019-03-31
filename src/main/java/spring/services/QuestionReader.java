@@ -1,5 +1,6 @@
 package spring.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import spring.domain.Question;
 
 import java.io.File;
@@ -9,21 +10,22 @@ import java.util.List;
 import java.util.Scanner;
 
 public class QuestionReader implements IQuestionReader {
-    private String fileName;
 
-    public QuestionReader(String fileName) {
-        this.fileName = fileName;
-    }
+    @Value("${question.file.path}")
+    private String filePath;
+
+    @Value("${answers.separator}")
+    private String answersSeparator;
 
     public List<Question> getAll() {
         List<Question> result = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File("src/main/resources/" + fileName))) {
+        try (Scanner scanner = new Scanner(new File(filePath))) {
             while (scanner.hasNextLine()) {
                 Question question = new Question();
                 question.setAnswers(new ArrayList<>());
                 String line = scanner.nextLine();
                 if (line != null) {
-                    String[] parts = line.split(",");
+                    String[] parts = line.split(answersSeparator);
                     for (int i = 0; i < parts.length; i++) {
                         if (i == 0) {
                             question.setQuestion(parts[0]);
@@ -44,7 +46,8 @@ public class QuestionReader implements IQuestionReader {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("QuestionReader{");
-        sb.append("fileName='").append(fileName).append('\'');
+        sb.append("filePath='").append(filePath).append('\'');
+        sb.append(", answersSeparator='").append(answersSeparator).append('\'');
         sb.append('}');
         return sb.toString();
     }
