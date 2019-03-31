@@ -71,7 +71,7 @@ public class Main {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
-        ms.setBasename("classpath:/i18n/application");
+        ms.setBasename("classpath:/i18n/bundle");
         ms.setDefaultEncoding("UTF-8");
         return ms;
     }
